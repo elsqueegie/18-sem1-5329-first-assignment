@@ -90,7 +90,8 @@ class Network:
                     grad = _grad
                 inode.grads = []
                 for inum in range(len(inode.weights)):
-                    inode.grads.append(grad*np.mean(inode.in_data.T[inum]))
+                    gfunc = get_gradient(inode.activation_func)
+                    inode.grads.append(gfunc(grad*np.mean(inode.in_data.T[inum])))
                 if count > 1:
                     _grad += np.sum([n.weights[pos] for n in self.layers[ilayer+2].nodes.values()])
             count += 1
