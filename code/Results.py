@@ -419,8 +419,15 @@ Y_val = label[50000:]
 
 # In[6]:
 
-get_ipython().run_cell_magic('time', '', 'np.random.seed(10)\n\nn_features = 128\nn_classes = 10\nhidden_layer_width = 500\np_dropout=0.05\n\nt = Net(n_features, n_classes, hidden_layer_width, p_dropout=p_dropout)\nt.sgd_with_momentum(X_train, Y_train, test=(X_val, Y_val), b_size=300, iterations=200000, p_iter=2000)')
+np.random.seed(10)
 
+n_features = 128
+n_classes = 10
+hidden_layer_width = 500
+p_dropout=0.05
+
+t = Net(n_features, n_classes, hidden_layer_width, p_dropout=p_dropout)
+t.sgd_with_momentum(X_train, Y_train, test=(X_val, Y_val), b_size=300, iterations=200000, p_iter=2000)
 
 # # Visualizations and Analysis
 
@@ -450,7 +457,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-get_ipython().magic('matplotlib inline')
 
 def get_precision(confusion_matrix, iclass):
     '''
@@ -554,8 +560,22 @@ def get_auc(curvy_bucketframe):
 
 # In[15]:
 
-get_ipython().run_cell_magic('time', '', 'buckets = get_curve_dataframe(validation_probs, validation_ground_truth)\naverage_buckets = average_out_curves(buckets, validation_ground_truth)\nax = plt.subplot()\nfor iclass in range(10):\n    g = buckets.plot(x=str(iclass)+"_fpr",y=str(iclass)+"_tpr", ax=ax)\n    \ng = average_buckets.sort_index(ascending=False\n        ).plot(x=\'average_fpr\', y=\'average_tpr\', linewidth=4, ax=ax, color="black", figsize=(10,10))\ng.set_xlabel("1 - False Positive Rate", fontsize=16)\ng.set_ylabel("True Positive Rate", fontsize=16)\ng.set_xticklabels([0,0.2,0.4,0.6,0.8,1], fontsize=16)\ng.set_yticklabels([0,0.2,0.4,0.6,0.8,1], fontsize=16)\n    \ng.legend([\'Class \'+str(i) for i in range(10)] + [\'Weighted Average\'], fontsize=12)\n\nplt.text(0.2,0.6,"Classifier ROC AUC score: {:.3f}".format(get_auc(average_buckets)), fontsize=20)')
+buckets = get_curve_dataframe(validation_probs, validation_ground_truth)
+average_buckets = average_out_curves(buckets, validation_ground_truth)
+ax = plt.subplot()
+for iclass in range(10):
+    g = buckets.plot(x=str(iclass)+"_fpr",y=str(iclass)+"_tpr", ax=ax)
+    
+g = average_buckets.sort_index(ascending=False
+        ).plot(x='average_fpr', y='average_tpr', linewidth=4, ax=ax, color="black", figsize=(10,10))
+g.set_xlabel("1 - False Positive Rate", fontsize=16)
+g.set_ylabel("True Positive Rate", fontsize=16)
+g.set_xticklabels([0,0.2,0.4,0.6,0.8,1], fontsize=16)
+g.set_yticklabels([0,0.2,0.4,0.6,0.8,1], fontsize=16)
+    
+g.legend(['Class '+str(i) for i in range(10)] + ['Weighted Average'], fontsize=12)
 
+plt.text(0.2,0.6,"Classifier ROC AUC score: {:.3f}".format(get_auc(average_buckets)), fontsize=20)
 
 # In[17]:
 
@@ -610,20 +630,34 @@ def get_cm_stat(confusion_matrix, stat):
 
 # In[20]:
 
-get_ipython().run_cell_magic('time', '', 'sns.set(font_scale=1.6)\ncm = get_multiclass_confusion_matrix(validation_predictions, validation_ground_truth)\ng = heatmap_confusion_matrix(cm)\ng.figure.axes[-1].yaxis.label.set_size(14)\ng.figure.axes[-1].yaxis.set_ticklabels([0,200,400,600,800], fontsize=14)\n\ng.figure.axes[0].xaxis.set_ticklabels([0,1,2,3,4,5,6,7,8,9], fontsize=14)\ng.figure.axes[0].xaxis.label.set_size(14)\ng.figure.axes[0].yaxis.set_ticklabels([0,1,2,3,4,5,6,7,8,9], fontsize=14)\ng.figure.axes[0].yaxis.label.set_size(14)')
+sns.set(font_scale=1.6)
+cm = get_multiclass_confusion_matrix(validation_predictions, validation_ground_truth)
+g = heatmap_confusion_matrix(cm)
+g.figure.axes[-1].yaxis.label.set_size(14)
+g.figure.axes[-1].yaxis.set_ticklabels([0,200,400,600,800], fontsize=14)
 
+g.figure.axes[0].xaxis.set_ticklabels([0,1,2,3,4,5,6,7,8,9], fontsize=14)
+g.figure.axes[0].xaxis.label.set_size(14)
+g.figure.axes[0].yaxis.set_ticklabels([0,1,2,3,4,5,6,7,8,9], fontsize=14)
+g.figure.axes[0].yaxis.label.set_size(14)
 
 # In[21]:
 
-get_ipython().run_cell_magic('time', '', 'prec, rec, f1 = get_cm_stat(cm,\'precision\'),get_cm_stat(cm,\'recall\'),get_cm_stat(cm,\'f1-score\')\nprint("Precision: {:.3f}\\nRecall: {:.3f}\\nF1-score: {:.3f}".format(prec,rec,f1))')
-
+prec, rec, f1 = get_cm_stat(cm,'precision'),get_cm_stat(cm,'recall'),get_cm_stat(cm,'f1-score')
+print("Precision: {:.3f}\nRecall: {:.3f}\nF1-score: {:.3f}".format(prec,rec,f1))
 
 # In[23]:
 
-get_ipython().run_cell_magic('time', '', "print('Validation Accuracy:',accuracy(validation_ground_truth, validation_predictions),\n      'Test Accuracy:',accuracy(t.predict(X_test), Y_test),\n      'Train Accuracy:',accuracy(t.predict(X_train), Y_train))")
+
+print('Validation Accuracy:',accuracy(validation_ground_truth, validation_predictions),
+      'Test Accuracy:',accuracy(t.predict(X_test), Y_test),
+      'Train Accuracy:',accuracy(t.predict(X_train), Y_train))
 
 
 # In[24]:
 
-get_ipython().run_cell_magic('time', '', 'train_progress = pd.DataFrame([t.test_error]).T\ntrain_progress.columns=[\'Test Acc%\']\ng = train_progress.plot(figsize=(10,10), legend=False)\ng.set_xlabel("Iteration")\ng.set_ylabel("Test-set accuracy")')
-
+train_progress = pd.DataFrame([t.test_error]).T
+train_progress.columns=['Test Acc%']
+g = train_progress.plot(figsize=(10,10), legend=False)
+g.set_xlabel("Iteration")
+g.set_ylabel("Test-set accuracy")
