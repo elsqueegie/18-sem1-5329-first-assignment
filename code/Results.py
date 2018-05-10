@@ -661,3 +661,18 @@ train_progress.columns=['Test Acc%']
 g = train_progress.plot(figsize=(10,10), legend=False)
 g.set_xlabel("Iteration")
 g.set_ylabel("Test-set accuracy")
+
+
+# In[25]
+
+with h5py.File('../Assignment-1-Dataset/test_128.h5','r') as H:
+    final_test = np.copy(H['data'])
+    
+final_predictions = t.predict(final_test)
+final_probabilities = t.predict_proba(final_test)
+
+with h5py.File('../outputs/final_predictions.h5','w') as H:
+    H.create_dataset('data', data=final_predictions)
+    
+with h5py.File('../outputs/final_probabilities.h5','w') as H:
+    H.create_dataset('data', data=final_probabilities)
