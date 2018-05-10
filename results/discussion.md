@@ -1,3 +1,9 @@
 The model performed well, but not overwhelmingly. Accuracy, precision, recall and f score did not exceed 80% on validation, though whether this could have been achieved with additional training is unclear. On multiclass problems such as MNIST, neural networks can achieve accuracy scores over 95%, and we expected to see similar performance given the dataset provided had over a hundred features. It was also disappointing to see the performance imbalances stay incorrected - classes that needed more focus could have perhaps been prioritised via gradient-boosting, which presents an opportunity for further inquiry.
 
 The solution was fast, but still took a long time to achieve. Part of this was the reporting and printing overhead - if the user can tolerate a worse granularity on training progress, there would be some improvement in training times. The size of the neural network was also a factor, with 500 nodes in each hidden layer increasing the training resources required.
+
+The model itself was very delicate - since everything is so highly dependent on the correct calculations of the previous step, coding the model from scratch was a frustrating process. Implementations that relied too much on classes were hard to debug. It was disheartening to have the model break when trying to add a supposedly modular feature, especially when forward-pass would work well but backward-pass would not. Part of this is because it is often hard to find the cause of a problem. When the neural network was not converging, or exploding, it could be difficult to pinpoint the exact cause of the problem. Indeed, it was only by examining working neural networks and through techniques like manual calculations of gradients that we were able to create a functioning solution.
+
+References:
+
+Tensorflow 97% MNIST result tutorial: https://www.tensorflow.org/tutorials/layers
