@@ -4,7 +4,7 @@ The network was presented with a dataset of 60,000 observations and 128 features
 
 In order to ensure the results were as unbiased as possible, the dataset was randomly shuffled and split into 3 different buckets. 40,000 shuffled rows became the training set, another 10,000 became a testing/monitoring set, and a final 10,000 were used for a validation set. This ensured that the model had no chance of overfitting to the training set, as well as ensuring honesty in the results by not hyper-parameter tuning to the test set.
 
-The model was trained via stochastic gradient descent with mini-batching, for 200,000 iterations or 5 Epochs of the training data. This took approximately 2 hours on a 2015 Macbook Pro. Batch size was 200, and training rate was 1e-3. The results of the model are discussed below:
+The model was trained via stochastic gradient descent with mini-batching, for 200,000 iterations or 5 Epochs of the training data. This took approximately 2 hours on a 2015 Macbook Pro. Batch size was 200, and training rate was 1e-3. The network was initialised with 2 hidden layers, 500 nodes in each hidden layer, and ReLU activation. The results of the model are discussed below:
 
 3.1 Accuracy
 
